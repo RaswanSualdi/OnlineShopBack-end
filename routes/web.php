@@ -20,7 +20,7 @@ use Illuminate\Routing\RouteGroup;
 |
 */
 
-Auth::routes(['register'=> false]);
+Auth::routes(['register'=> true]);
 
 Route::group(['middleware'=> 'auth'], function(){
     Route::get('/',[DashBoardController::class,'index'])->name('dashboard');
