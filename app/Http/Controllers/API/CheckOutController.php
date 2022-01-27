@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Mail\notifications;
 use App\Models\Product;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+
 use App\Models\TransactionDetail;
 use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\API\CheckOutRequest;
+
 use App\Http\Controllers\API\ResponseFormatter;
-use App\Notifications\notofications;
 
 class CheckOutController extends Controller
 {
@@ -18,7 +21,8 @@ class CheckOutController extends Controller
         $data['uuid']= 'TRX'.mt_rand(10000,99999).mt_rand(100,999);
 
         $transaction = Transaction::create($data);
-        $transaction->notify(new notofications($transaction));
+        Mail::to($transaction->email)->send(new notifications($transaction->name));
+       
         foreach ($request->transaction_details as $product)
         {
             $details[] = new TransactionDetail([
